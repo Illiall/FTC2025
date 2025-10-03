@@ -24,7 +24,7 @@ public class Main extends LinearOpMode {
             //Gamepad joysticks
             //Gets values from the gamepad for the values used in the mecanum drive train
             //Gets a double forward value
-            double forwards = gamepad1.left_stick_y;
+            double forwards = -gamepad1.left_stick_y;
             //Gets a double strafe Value
             double strafe = gamepad1.left_stick_x;
             //Gets a double rotation Value

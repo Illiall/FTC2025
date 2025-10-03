@@ -17,7 +17,7 @@ public class MecanumDrive {
     //creates a variable for the orientation of the robot for the IMU
     RevHubOrientationOnRobot orientation;
     //Create multiple variable for the robot
-    double theta, distance, max_power, max_speed, fwds, strf, fr_power, fl_power, br_power, bl_power;
+    double theta,new_theta, distance, max_power, max_speed, fwds, strf, fr_power, fl_power, br_power, bl_power;
     //Initializes the parts on the robot
     public MecanumDrive(HardwareMap hardwaremap) {
         //Sets the motor names
@@ -35,6 +35,9 @@ public class MecanumDrive {
         //Reverse motors if needed
         fr_motor.setDirection(DcMotorSimple.Direction.REVERSE);
         br_motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        //fl_motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        //bl_motor.setDirection(DcMotorSimple.Direction.REVERSE);
+
         //initialize imu
         imu.initialize(new IMU.Parameters(orientation));
     }
@@ -61,10 +64,9 @@ public class MecanumDrive {
 
         //Sets the motors power so that it doesn't go over max speed and max power
         fl_motor.setPower(max_speed * (fl_power/max_power));
-        fr_motor.setPower(max_speed * (fr_power/max_power));
-        bl_motor.setPower(max_speed * (bl_power/max_power));
-        br_motor.setPower(max_speed * (br_power/max_power));
-
+        fr_motor.setPower(max_speed * (fr_power)/max_power);
+        bl_motor.setPower(max_speed * (bl_power)/max_power);
+        br_motor.setPower(max_speed * (br_power)/max_power);
     }
     /*Creates a function that takes the gamepad values changes them, then uses the values
      in the robot relative driving*/
@@ -74,10 +76,10 @@ public class MecanumDrive {
         //calculates the distance with forwards and strafe
         distance = Math.hypot(strafe,forwards);
         //calculates the current rotation
-        theta = AngleUnit.normalizeRadians(theta - getYaw());
+        new_theta = AngleUnit.normalizeRadians(theta - getYaw());
         //calculates the new forwards power and new strafe power
-        fwds = distance * Math.sin(theta);
-        strf = distance * Math.cos(theta);
+        fwds = distance * Math.sin(new_theta);
+        strf = distance * Math.cos(new_theta);
         //Uses the calculated values for the input for the robot relative drive
         this.robot_relative(fwds,strf,rotation);
     }
